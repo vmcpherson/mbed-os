@@ -93,7 +93,8 @@
        defined(TARGET_STM32F411RE) ||\
        defined(TARGET_STM32F446RE) ||\
        defined(TARGET_STM32F446VE) ||\
-       defined(TARGET_STM32F446ZE))
+       defined(TARGET_STM32F446ZE) ||\
+       defined(TARGET_STM32F407ZG))
 #define INITIAL_SP              (0x20020000UL)
 
 #elif (defined(TARGET_STM32F429ZI) ||\
