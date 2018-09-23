@@ -10,9 +10,19 @@
   PG11/ETH_RMII_TX_EN
   PG13/ETH_RMII_TXD0
   PG14/ETH_RMII_TXD1
-
   PA3/ETH_RMII_MDINT
   PG6/EPHY-RST#
+
+
+  TODO
+  ====
+
+  PA3 is the interrupt pin. IT is not configured, how should it be?
+  
+
+  PG6 is connected to the NRST pin of the PHY. It has a power-on reset circuit.
+  Do we need to configure PG6 as a open collecter output and reset the PHY
+  manually at any point?
 */
 
 
@@ -30,7 +40,6 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* heth)
 
         /* Enable GPIOs clocks */
         __HAL_RCC_GPIOA_CLK_ENABLE();
-        __HAL_RCC_GPIOB_CLK_ENABLE();
         __HAL_RCC_GPIOC_CLK_ENABLE();
         __HAL_RCC_GPIOG_CLK_ENABLE();
 
@@ -61,8 +70,6 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* heth)
           ===============
           PG6/EPHY-RST#
         */
-
-
 
         /* Configure PA1, PA2 and PA7
            
@@ -115,21 +122,21 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* heth)
         __HAL_RCC_ETH_CLK_DISABLE();
 
         /** ETH GPIO Configuration
-          RMII_REF_CLK ----------------------> PA1
-          RMII_MDIO -------------------------> PA2
-          RMII_MDC --------------------------> PC1
-          RMII_MII_CRS_DV -------------------> PA7
-          RMII_MII_RXD0 ---------------------> PC4
-          RMII_MII_RXD1 ---------------------> PC5
-          RMII_MII_RXER ---------------------> PG2
-          RMII_MII_TX_EN --------------------> PG11
-          RMII_MII_TXD0 ---------------------> PG13
-          RMII_MII_TXD1 ---------------------> PB13
+
+          PA1/RMII_REF_CLK
+          PA2/ETH_RMII_MDIO
+          PC1/ETH_RMII_MDC
+          PA7/D11/ETH_RMII_CRS_DV
+          PC4/ETH_RMII_RXD0
+          PC5/ETH_RMII_RXD1
+          ..
+          PG11/ETH_RMII_TX_EN
+          PG13/ETH_RMII_TXD0
+          PG14/ETH_RMII_TXD1
          */
         HAL_GPIO_DeInit(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_7);
-        HAL_GPIO_DeInit(GPIOB, GPIO_PIN_13);
         HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5);
-        HAL_GPIO_DeInit(GPIOG, GPIO_PIN_2 | GPIO_PIN_11 | GPIO_PIN_13);
+        HAL_GPIO_DeInit(GPIOG, GPIO_PIN_11 | GPIO_PIN_13 | GPIO_PIN_14);
 
         /* Disable the Ethernet global Interrupt */
         NVIC_DisableIRQ(ETH_IRQn);
